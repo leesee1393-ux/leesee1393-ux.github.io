@@ -1,1 +1,512 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4ecdd"><meta name="description" content="이세형의 임베디드 프로젝트 상세 소개 페이지"><title>프로젝트 상세 | 이세형 포트폴리오</title><link rel="stylesheet" href="style.css"></head><body><a class="skip" href="#main">본문으로 이동</a><header class="site-header"><div class="wrap nav-inner"><a class="wordmark" href="index.html"><span class="compass" aria-hidden="true">✧</span><span><b>SEHYUNG LEE</b><small>PROJECT FIELD NOTES</small></span></a><nav class="detail-nav"><a href="index.html#projects">← 프로젝트 목록</a><a href="https://github.com/leesee1393-ux" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header><main id="main" class="wrap detail-main"><nav class="breadcrumb" aria-label="현재 위치"><a href="index.html">홈</a><span>/</span><a href="index.html#projects">프로젝트</a><span>/</span><span id="bread-current">상세</span></nav><div id="detail-root"><p class="loading">프로젝트 내용을 불러오고 있습니다.</p></div></main><footer class="site-footer"><div class="wrap footer-bottom"><span>© 2026 SEHYUNG LEE · PROJECT NOTES</span><a href="index.html#projects">프로젝트 목록으로 돌아가기 ↑</a></div></footer><script src="projects.js"></script><script src="project-detail.js"></script></body></html>
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f2eb">
+  <meta name="description" content="이세형의 임베디드 프로젝트 상세 구현 기록.">
+  <title>Project Notes | 이세형</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root{
+  --bg:#f6f2eb;
+  --paper:#fffdf8;
+  --sand:#eee5d7;
+  --ink:#2c2a27;
+  --sub:#615b52;
+  --quiet:#83776a;
+  --line:#d7cbbb;
+  --accent:#873f32;
+  --serif:"Noto Serif KR",Georgia,serif;
+  --sans:"DM Sans","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --mono:"DM Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:95px}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.75 var(--sans);-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:3px solid #975342;outline-offset:4px}
+a:hover{color:var(--accent)}
+button{font:inherit}
+.shell{width:min(1180px,calc(100% - 88px));margin-inline:auto}
+.skip-link{position:absolute;left:12px;top:-100px;background:white;padding:12px 18px;z-index:50}.skip-link:focus{top:12px}
+.site-header{position:sticky;top:0;z-index:20;background:rgba(246,242,235,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(13px)}
+.header-inner{height:88px;display:flex;align-items:center;justify-content:space-between;gap:25px}
+.brand{display:inline-flex;flex-direction:column;gap:4px;flex-shrink:0}.brand-main{font:700 25px/1.15 Georgia,serif;letter-spacing:.11em}.brand-dot{color:var(--accent)}.brand-sub{font:10px/1.5 var(--mono);letter-spacing:.15em;color:var(--quiet)}
+.site-nav{display:flex;align-items:center;gap:34px}.site-nav a{font-size:14px;font-weight:600}.site-nav .nav-github{padding:9px 16px;border:1px solid #a99580;border-radius:2px}
+.nav-toggle{display:none;background:transparent;border:1px solid var(--line);padding:8px 12px;color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.07fr .93fr;gap:70px;align-items:center;padding-top:88px;padding-bottom:94px;min-height:580px}
+.eyebrow{font:500 12px/1.5 var(--mono);color:var(--accent);letter-spacing:.13em}
+.eyebrow-line{width:26px;height:1px;background:var(--accent);vertical-align:middle;display:inline-block;margin-right:11px}
+.hero h1{font:700 clamp(38px,3.75vw,54px)/1.49 var(--serif);letter-spacing:-.072em;margin:24px 0 23px;white-space:normal}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-lead{font-size:18px;line-height:1.86;font-weight:600;margin:0 0 14px}
+.hero-desc{font:13px/1.8 var(--mono);color:var(--quiet);margin:0 0 29px;max-width:510px;word-break:normal}
+.hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:space-between;gap:25px;min-height:51px;padding:11px 20px;border:1px solid var(--ink);font-size:14px;font-weight:700;border-radius:2px;transition:background .18s,color .18s,transform .18s;white-space:nowrap}
+.btn-primary{background:var(--ink);color:var(--paper)}.btn-primary:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-quiet{background:transparent;border-color:#c1b4a2}.btn-quiet:hover{background:#e9ded0}
+.photo-frame{position:relative;background:#eae0d1;margin:0;border:1px solid #cbb9a2;padding:12px 12px 0;box-shadow:12px 13px 0 rgba(128,106,75,.09)}
+.hero-photo img{height:340px;width:100%;object-fit:cover;display:block;filter:saturate(.83)}
+.photo-fallback{display:none;align-items:center;justify-content:center;flex-direction:column;gap:15px;min-height:100%;height:100%;background:linear-gradient(135deg,#c5b9a2,#ece0ca);color:#6b5942;font:12px var(--mono);letter-spacing:.14em}
+.fallback-icon{display:flex;align-items:center;justify-content:center;width:120px;height:120px;border-radius:50%;border:1px solid rgba(74,62,43,.38);font:42px Georgia,serif;letter-spacing:0;color:#504735}
+.image-missing img{display:none}.image-missing .photo-fallback{display:flex}
+.hero-photo .photo-fallback{height:340px}
+.hero-photo figcaption{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 3px 15px;color:#74634f;font:11px/1.5 var(--mono)}
+.hero-photo figcaption strong{font-weight:500;white-space:nowrap}
+.index-rule{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;padding:17px 0;color:#7b6958;font:11px/1.5 var(--mono);letter-spacing:.12em}
+.section{padding-top:92px;padding-bottom:98px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:30px}.section-head h2{font:700 35px/1.5 var(--serif);letter-spacing:-.055em;margin:10px 0 9px}.section-head p{font-size:15px;color:var(--sub);margin:0}.section-index{font:30px/1.1 Georgia,serif;color:#b0a08e}
+.featured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-bottom:24px}
+.feature-card,.small-card{border:1px solid var(--line);background:var(--paper);overflow:hidden;min-width:0;transition:box-shadow .18s,transform .18s}
+.feature-card:hover,.small-card:hover{box-shadow:0 10px 28px rgba(55,45,34,.1);transform:translateY(-2px)}
+.feature-card .media{height:285px}
+.media{position:relative;overflow:hidden;margin:0;background:var(--sand)}
+.media img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}.feature-card:hover .media img,.small-card:hover .media img{transform:scale(1.018)}
+.media.fit-contain img{object-fit:contain;padding:12px;background:#eee6d9}
+.media .photo-fallback{height:100%;background:linear-gradient(120deg,#ded0b8,#eae2d4)}
+.media .photo-fallback .fallback-icon{width:94px;height:94px;font-size:27px}
+.media img[src=""]{display:none}
+.media.image-missing .photo-fallback,.media:not(.has-photo) .photo-fallback{display:flex}
+.media .media-number{position:absolute;left:17px;top:17px;background:rgba(250,247,238,.94);border:1px solid #d3c2a9;padding:5px 10px;font:12px var(--mono);color:#6e5946;z-index:1}
+.feature-card-content{padding:25px 29px 28px}.card-eyebrow{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font:11px/1.5 var(--mono);color:var(--accent);letter-spacing:.06em}.card-eyebrow span:last-child{color:#817565}
+.feature-card h3{font:700 29px/1.35 var(--serif);letter-spacing:-.045em;margin:13px 0 10px}
+.card-summary{font-size:16px;color:#4e4840;line-height:1.8;margin:0;min-height:60px}
+.role-line{color:var(--accent);font-size:13px;font-weight:600;margin:18px 0 15px}
+.stack{display:flex;flex-wrap:wrap;gap:6px}.stack span{font-size:12px;color:#5b5044;border:1px solid #d5c9b9;padding:4px 9px;background:#f6f0e7;border-radius:2px}
+.card-actions{margin-top:25px;border-top:1px solid var(--line);padding-top:20px;display:flex;gap:24px;flex-wrap:wrap;align-items:center}
+.detail-link{font-size:15px;font-weight:700;color:var(--accent);text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px}
+.github-link{font-size:14px;font-weight:600}.github-link:hover{text-decoration:underline;text-underline-offset:5px}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.small-card{display:grid;grid-template-columns:37% 1fr;min-height:245px}
+.small-card .media{height:100%;min-height:245px}.small-card .media img{object-fit:cover}.small-card .media.fit-contain img{padding:10px}
+.small-card .media .media-number{font-size:11px;top:11px;left:11px}
+.small-card-content{display:flex;flex-direction:column;padding:24px 22px;min-width:0}.small-card .card-eyebrow{font-size:10px}.small-card h3{font:700 21px/1.45 var(--serif);letter-spacing:-.045em;margin:11px 0}
+.small-card .card-summary{font-size:14px;line-height:1.75;min-height:0}.small-card .role-line{font-size:12px;margin:12px 0}.small-card .stack{margin-top:auto}.small-card .stack span{font-size:11px;padding:3px 7px}
+.small-card .card-actions{margin-top:16px;padding-top:13px;gap:17px}.small-card .detail-link,.small-card .github-link{font-size:12px}
+.section-note{margin:23px 0 0;color:#786f64;font-size:13px}
+.archive-band{background:#eee7dc;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.archive-band .section-head{align-items:center}.section-link{font-size:14px;color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:5px;white-space:nowrap}
+.archive-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:55px}
+.archive-item{border-top:1px solid #c8bbab;padding:24px 0;display:grid;grid-template-columns:35px 1fr 25px;gap:15px;align-items:start}
+.archive-no{font:13px var(--mono);color:var(--accent);padding-top:5px}.archive-item h3{font:700 18px/1.45 var(--serif);margin:0 0 5px}.archive-item p{font-size:14px;color:var(--sub);line-height:1.65;margin:0}.archive-item a.archive-open{color:var(--accent);font-size:19px;font-weight:700;text-align:right}.archive-item a.archive-open:hover{transform:translateX(2px)}
+.about-section{display:grid;grid-template-columns:1fr 1.1fr;gap:105px}.about-section h2{font:700 clamp(25px,2.5vw,32px)/1.65 var(--serif);letter-spacing:-.055em;margin:20px 0 0}.about-copy p{font-size:15px;line-height:2;word-break:keep-all;color:var(--sub);margin:0 0 18px}.about-copy strong{color:var(--ink)}.skill-strip{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}.skill-strip span{font:11px var(--mono);padding:8px 11px;border:1px solid var(--line);color:#66584b}
+.site-footer{background:#e7dccd;border-top:1px solid #c9bca9}.footer-inner{padding:33px 0;display:flex;align-items:center;justify-content:space-between;gap:20px}.footer-name{font:700 21px Georgia,serif;letter-spacing:.1em;display:block}.footer-sub{font:11px var(--mono);color:#75695e;display:block;margin-top:5px}.footer-links{display:flex;gap:25px;font-size:14px;font-weight:600}.footer-base{border-top:1px solid #c8bcaa;padding:14px 0 24px;font:11px var(--mono);color:#706557}
+.project-main{min-height:75vh}.breadcrumbs{padding:35px 0 0;font:12px var(--mono);color:#86796b;display:flex;gap:12px;flex-wrap:wrap}.breadcrumbs a{text-decoration:underline;text-underline-offset:4px}
+.project-hero{padding-top:65px;padding-bottom:50px}.project-hero .eyebrow{margin:0}.project-hero h1{font:700 clamp(35px,4.1vw,55px)/1.35 var(--serif);letter-spacing:-.05em;margin:18px 0 13px;overflow-wrap:anywhere}.project-hero .repo-path{font:12px/1.8 var(--mono);color:var(--quiet);overflow-wrap:anywhere}.project-intro{font:500 20px/1.85 var(--serif);max-width:860px;margin:25px 0;color:#4b4339}.project-hero .stack{margin:23px 0 26px}.project-hero .card-actions{border:0;padding:0;margin:0}.detail-figure{height:420px;border:1px solid var(--line);margin:0;background:#ede1ce}.detail-figure img{height:100%;object-fit:contain;padding:16px;background:#eee3d1}.detail-figure .photo-fallback{height:100%}
+.detail-cols{display:grid;grid-template-columns:1.25fr .8fr;gap:70px;padding:78px 0 70px}.detail-cols h2,.detail-sections h2{font:700 27px/1.45 var(--serif);letter-spacing:-.04em;margin:10px 0 24px}.detail-cols p{font-size:16px;line-height:1.95;color:#554a40}.role-panel{border:1px solid var(--line);padding:26px;background:#eee6d8;align-self:start}.role-panel h3{font:700 18px var(--serif);margin:0 0 13px}.role-panel p{font-size:15px;color:var(--accent);font-weight:700;margin:0}.role-panel .role-meta{padding-top:22px;margin-top:24px;border-top:1px solid #c9bba9}.role-panel .role-meta span{font:11px var(--mono);display:block;color:var(--quiet)}.role-panel .role-meta strong{font-size:13px;font-weight:500;line-height:1.75;display:block;margin-top:9px;word-break:break-word}
+.detail-sections{border-top:1px solid var(--line);padding-top:60px}.detail-points{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0;margin:0;list-style:none}.detail-points li{background:var(--paper);border:1px solid var(--line);padding:24px 25px;display:grid;grid-template-columns:32px 1fr;gap:12px}.detail-points .point-no{font:12px var(--mono);color:var(--accent)}.detail-points p{font-size:15px;line-height:1.85;margin:0}.detail-section{padding:53px 0;border-bottom:1px solid var(--line)}.detail-section h2{margin-bottom:19px}.detail-section p{max-width:900px;font-size:16px;line-height:1.9;word-break:keep-all}.flow-text{font:14px/1.9 var(--mono);padding:22px 25px;background:#ede3d3;border-left:3px solid var(--accent);overflow-wrap:anywhere}
+.bottom-cta{display:flex;align-items:center;justify-content:space-between;gap:30px;padding:62px 0 110px}.bottom-cta p{font:11px var(--mono);color:var(--accent);margin:0 0 8px}.bottom-cta a.next-link{font:700 23px/1.5 var(--serif)}.error-state{padding:130px 0 200px}.error-state h1{font:700 38px var(--serif)}
+@media(max-width:1120px){.shell{width:min(100% - 64px,1060px)}.hero{gap:40px}.small-card{grid-template-columns:38% 1fr}.small-card h3{font-size:19px}.small-card-content{padding:18px}.small-card .card-actions{gap:13px}.card-actions{gap:16px}}
+@media(max-width:860px){.shell{width:min(100% - 44px,750px)}.site-nav{gap:17px}.hero{grid-template-columns:1fr;padding-top:65px;padding-bottom:70px;min-height:0}.hero-photo{max-width:650px;width:100%}.hero-photo img,.hero-photo .photo-fallback{height:340px}.hero h1{font-size:47px}.section{padding-top:68px;padding-bottom:72px}.small-card{grid-template-columns:1fr;min-height:0}.small-card .media{height:180px;min-height:0}.small-card-content{padding:23px}.small-card .stack{margin-top:13px}.about-section{grid-template-columns:1fr;gap:30px}.detail-cols{gap:35px}}
+@media(max-width:650px){.shell{width:calc(100% - 36px)}.header-inner{height:73px}.brand-main{font-size:20px}.brand-sub{font-size:8px;letter-spacing:.07em}.nav-toggle{display:inline-flex;align-items:center;gap:10px;cursor:pointer;font-size:13px}.site-nav:not(.detail-nav){display:none;position:absolute;left:0;right:0;top:73px;flex-direction:column;align-items:stretch;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 18px 20px}.site-nav.open{display:flex}.site-nav:not(.detail-nav) a{padding:12px 10px}.site-nav .nav-github{border:none;padding:12px 10px!important}.detail-nav{display:flex;gap:10px}.detail-nav a{font-size:12px}.detail-nav .nav-github{display:none}.hero{padding-top:47px;padding-bottom:61px;gap:38px}.hero h1{font-size:clamp(31px,7.8vw,42px);line-height:1.5;letter-spacing:-.075em}.hero-lead{font-size:16px}.hero-desc{font-size:11px}.hero-actions{align-items:stretch}.hero-actions .btn{flex:1;justify-content:center;gap:11px;padding-inline:12px;font-size:12px}.hero-photo img,.hero-photo .photo-fallback{height:235px}.hero-photo figcaption{font-size:9px}.hero-photo figcaption strong{white-space:normal}.index-rule{font-size:9px}.index-rule span:last-child{display:none}.section-head h2{font-size:29px}.section-head p{font-size:14px}.section-index{display:none}.featured-grid,.project-grid,.archive-list{grid-template-columns:1fr}.feature-card .media{height:235px}.feature-card-content{padding:23px}.feature-card h3{font-size:25px}.card-summary{font-size:15px;min-height:0}.small-card{grid-template-columns:35% 1fr;min-height:225px}.small-card .media{height:100%;min-height:225px}.small-card-content{padding:16px}.small-card h3{font-size:17px;margin:9px 0}.small-card .card-summary{font-size:12px}.small-card .role-line{display:none}.small-card .stack{gap:4px}.small-card .stack span{font-size:9px;padding:2px 4px}.small-card .card-actions{padding-top:10px;margin-top:12px;gap:10px}.small-card .detail-link,.small-card .github-link{font-size:11px}.archive-band .section-head{align-items:start;flex-direction:column}.archive-item{grid-template-columns:27px 1fr 20px;gap:10px}.about-section h2{font-size:27px}.about-copy p{font-size:14px}.footer-inner{align-items:start;flex-direction:column}.detail-figure{height:270px}.project-hero{padding-top:42px;padding-bottom:34px}.project-hero h1{font-size:32px}.project-intro{font-size:17px}.detail-cols{grid-template-columns:1fr;gap:30px;padding:47px 0}.detail-cols h2,.detail-sections h2{font-size:23px}.detail-points{grid-template-columns:1fr}.detail-section{padding:37px 0}.bottom-cta{align-items:flex-start;flex-direction:column;padding:45px 0 65px}.bottom-cta .btn{width:100%}}
+@media(max-width:400px){.small-card{display:block}.small-card .media{height:176px;min-height:0}.small-card-content{padding:21px}.small-card h3{font-size:20px}.small-card .role-line{display:block}.small-card .stack span{font-size:11px;padding:3px 6px}.small-card .card-summary{font-size:14px}.small-card .card-actions{gap:16px}.small-card .detail-link,.small-card .github-link{font-size:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.feature-card,.small-card,.media img{transition:none}.feature-card:hover,.small-card:hover{transform:none}}
+/* Progressive image display: the engineering-paper placeholder stays visible until
+   a genuine repository image is loaded, preventing empty image regions. */
+.hero-photo .photo-fallback{display:flex;position:absolute;top:12px;left:12px;right:12px;height:340px;min-height:0;z-index:0}
+.hero-photo img{position:relative;z-index:1}
+.media .photo-fallback{display:flex;position:absolute;inset:0;z-index:0;background:
+  linear-gradient(90deg,transparent calc(50% - .5px),rgba(96,73,46,.13) 50%,transparent calc(50% + .5px)),
+  linear-gradient(transparent calc(50% - .5px),rgba(96,73,46,.13) 50%,transparent calc(50% + .5px)),
+  linear-gradient(120deg,#dccfb9,#eee4d6)}
+.media img{position:absolute;inset:0;z-index:1}
+.media.image-missing img{display:none}
+@media(max-width:860px){.hero-photo .photo-fallback{height:340px}}
+@media(max-width:650px){.hero-photo .photo-fallback{height:235px}}
+
+.hero-photo img,.media img{opacity:0}
+.hero-photo.image-loaded img,.media.image-loaded img{opacity:1}
+.photo-frame,.media{isolation:isolate}
+.hero-photo .photo-fallback,.media .photo-fallback{z-index:1}
+.hero-photo img,.media img{z-index:2}
+.media .media-number{z-index:3}
+
+</style>
+</head>
+<body>
+  <a class="skip-link" href="#content">본문으로 이동</a>
+  <header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html"><span class="brand-main">SEHYUNG LEE<span class="brand-dot">.</span></span><span class="brand-sub">EMBEDDED ENGINEERING / PORTFOLIO</span></a><nav class="site-nav detail-nav" aria-label="주 메뉴"><a href="index.html#projects">← 프로젝트 목록</a><a class="nav-github" href="https://github.com/leesee1393-ux" target="_blank" rel="noopener noreferrer">GitHub ↗</a></nav></div></header>
+  <main class="shell project-main" id="content"><div id="project-detail" aria-live="polite"><p>프로젝트 정보를 불러오는 중입니다.</p></div></main>
+  <footer class="site-footer"><div class="shell footer-inner"><div><span class="footer-name">SEHYUNG LEE</span><span class="footer-sub">Embedded Engineering Portfolio</span></div><div class="footer-links"><a href="index.html#projects">Projects ↑</a><a href="https://github.com/leesee1393-ux" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div><div class="shell footer-base">© 2026 SEHYUNG LEE · ENGINEERING NOTES</div></footer>
+  <script>
+window.PORTFOLIO_PROJECTS = [
+  {
+    "id": "linux-fan",
+    "title": "Linux Smart Fan",
+    "repo": "twotwoship/Linux_fan",
+    "label": "LINUX / DEVICE DRIVER",
+    "type": "TEAM PROJECT",
+    "kind": "featured",
+    "status": "구현 기록",
+    "image": "https://raw.githubusercontent.com/twotwoship/Linux_fan/main/image/motor_driver.jpg",
+    "imageFit": "contain",
+    "imageAlt": "Linux Fan 팀 프로젝트의 모터 드라이버 사진",
+    "signal": "Linux /dev/fan_motor",
+    "summary": "Jetson Orin Nano와 Linux 디바이스 드라이버를 이용한 팬·타이머 제어 시스템.",
+    "role": "담당: Motor Driver · FND Timer Driver",
+    "stack": [
+      "C",
+      "Linux Kernel",
+      "Jetson Orin Nano",
+      "GPIO / PWM"
+    ],
+    "overview": "Linux 커널의 Character Device를 이용해 팬의 모터 출력과 타이머 표시를 제어한 팀 프로젝트입니다. 애플리케이션과 디바이스 드라이버, 하드웨어 장치 사이의 제어 흐름을 구성했습니다.",
+    "flow": "User Application → /dev/fan_motor · /dev/fnd → Kernel Driver → PWM / GPIO → Motor · FND",
+    "responsibilities": [
+      "DC Motor 제어용 Linux Driver 개발",
+      "FND Timer Driver 구성 및 타이머 동작 연동",
+      "모터 PWM 신호와 장치 파일 입출력 확인"
+    ],
+    "implementation": [
+      "Jetson Orin Nano의 Linux 환경에서 모터, FND, 로터리 엔코더, BMP180, LED Bar 등 여러 장치를 연결하는 팀 프로젝트입니다.",
+      "각 장치의 드라이버와 애플리케이션 간 인터페이스를 문서화하고 실물 제어 흐름을 확인했습니다."
+    ],
+    "problem": "모터 출력이 정상 동작하지 않을 때 PWM 상태뿐 아니라 전원, 공통 GND, 구동 회로의 논리 입력을 함께 점검했습니다.",
+    "video": null
+  },
+  {
+    "id": "vision-tracker",
+    "title": "Vision Tracker RC Car",
+    "repo": "Vision-Tracker-Project/Vision_Tracker_Project",
+    "label": "STM32 / MOTOR CONTROL",
+    "type": "TEAM PROJECT",
+    "kind": "featured",
+    "status": "구현 기록",
+    "image": "https://raw.githubusercontent.com/Vision-Tracker-Project/Vision_Tracker_Project/main/docs/images/demo-preview.jpg",
+    "imageFit": "cover",
+    "imageAlt": "Vision Tracker 팀 프로젝트의 실제 RC카 영상 미리보기",
+    "signal": "UART → PWM → Motor",
+    "summary": "인물 추적 시스템과 연결한 RC카 구동·Pan/Tilt 모터 제어.",
+    "role": "담당: STM32 Motor / UART / Pan·Tilt",
+    "stack": [
+      "STM32",
+      "C",
+      "UART",
+      "PWM"
+    ],
+    "overview": "카메라로 선택한 인물을 추적하고 RC카를 수동 제어할 수 있는 팀 프로젝트입니다. 인식과 영상 처리는 팀 전체 기능이며, 본인은 STM32 구동부를 담당했습니다.",
+    "flow": "Tracking / Gamepad Command → UART Packet → STM32 → PWM → DC Motor · Pan/Tilt",
+    "responsibilities": [
+      "좌·우 모터의 주행 PWM 제어와 Pan/Tilt 제어 구현",
+      "UART 명령 패킷 수신 및 파싱",
+      "서보모터와 기동 PWM 동작의 문제 분석 및 조정"
+    ],
+    "implementation": [
+      "Jetson 기반 객체 추적과 게임패드 명령을 STM32 구동부로 전달하는 구조입니다.",
+      "STM32 측에서 수신한 명령을 모터 출력에 반영하고, 구동부 제어를 시험했습니다."
+    ],
+    "problem": "연속회전형 서보 혼용과 초기 Tilt 급회전, 낮은 PWM Duty에서의 기동 실패를 확인해 원인을 분석했습니다.",
+    "video": "https://github.com/user-attachments/assets/e00c0b1b-7b70-4e3e-86d6-873169e514bc"
+  },
+  {
+    "id": "stm32-motor",
+    "title": "Qt × STM32 Motor Control",
+    "repo": "leesee1393-ux/motor-control-pwm-uart2-control-",
+    "label": "QT / MCU CONTROL",
+    "type": "PERSONAL PROJECT",
+    "kind": "standard",
+    "status": "구현 기록",
+    "image": "https://raw.githubusercontent.com/leesee1393-ux/motor-control-pwm-uart2-control-/main/docs/nucleo-f411re-ez-r300-wiring.svg",
+    "imageFit": "contain",
+    "imageAlt": "NUCLEO-F411RE와 모터 드라이버 배선도",
+    "signal": "Qt UI → UART → STM32",
+    "summary": "Qt GUI에서 명령을 보내 UART와 PWM으로 모터 속도·방향을 제어합니다.",
+    "role": "Qt UI · STM32 UART / PWM",
+    "stack": [
+      "C / C++",
+      "Qt Widgets",
+      "STM32F411",
+      "UART / PWM"
+    ],
+    "overview": "PC의 Qt Widgets 화면에서 모터의 ON/OFF, 속도, 방향을 조작하고 UART로 STM32에 전달하는 장비 제어 프로그램입니다.",
+    "flow": "Qt Widgets → Qt SerialPort (115200 baud) → STM32 USART2 → GPIO / PWM → Motor",
+    "responsibilities": [
+      "Qt 화면의 버튼·슬라이더 및 상태 표시",
+      "UART 명령과 상태 피드백 처리",
+      "STM32 PWM·방향 제어 및 하드웨어 연동"
+    ],
+    "implementation": [
+      "ON / OFF / SPEED / FORWARD / REVERSE / STATUS 명령을 주고받습니다.",
+      "NUCLEO-F411RE와 EZ Motor R300 모듈을 사용한 배선도와 제어 흐름을 README에 정리했습니다."
+    ],
+    "problem": "시리얼 연결 및 실제 모터 구동을 함께 점검하기 위해 명령·응답 형식과 하드웨어 배선 정보를 문서화했습니다.",
+    "video": "https://www.youtube.com/watch?v=H0aGANyIsjI"
+  },
+  {
+    "id": "avr-rtc",
+    "title": "AVR RTC & LCD Calculator",
+    "repo": "leesee1393-ux/LCD-RTC-clock-calculator",
+    "label": "ATMEGA128A / I²C",
+    "type": "PERSONAL PROJECT",
+    "kind": "standard",
+    "status": "구현 기록",
+    "image": "https://github.com/user-attachments/assets/06f0de74-771c-4a1d-874c-e52f6b5846d9",
+    "imageFit": "contain",
+    "imageAlt": "ATmega128A와 LCD·RTC 회로 실물 사진",
+    "signal": "I²C → DS1307 → LCD",
+    "summary": "ATmega128A와 DS1307 RTC, LCD를 연동한 시계·계산기 시스템.",
+    "role": "I²C 통신 · LCD 표시",
+    "stack": [
+      "ATmega128A",
+      "C",
+      "I²C",
+      "DS1307 / LCD"
+    ],
+    "overview": "ATmega128A에서 DS1307 RTC 데이터를 읽고 LCD에 시각 및 계산기 결과를 표시하는 프로젝트입니다.",
+    "flow": "ATmega128A ↔ I²C ↔ DS1307 RTC → LCD / Calculator Mode",
+    "responsibilities": [
+      "DS1307 RTC 레지스터 읽기와 시간 출력",
+      "LCD 제어와 시계·계산기 모드 구성",
+      "실제 회로와 통신 파형 기록"
+    ],
+    "implementation": [
+      "시간 표시 및 시간 설정, 사칙연산 계산기 모드를 구성했습니다.",
+      "회로도, 레지스터 맵, I²C 파형과 FSM 자료를 저장소에 정리했습니다."
+    ],
+    "problem": "RTC 수신·LCD 표시 문제를 확인하고 모듈 교체 및 LCD Vo 명암 조정으로 대응했습니다.",
+    "video": "https://youtube.com/shorts/54PC0KObX_4"
+  },
+  {
+    "id": "fpga-stopwatch",
+    "title": "FPGA Clock & Stopwatch",
+    "repo": "leesee1393-ux/my_minsec_stopwatch",
+    "label": "VERILOG / BASYS3",
+    "type": "RTL LEARNING",
+    "kind": "standard",
+    "status": "학습 기록",
+    "image": null,
+    "imageFit": "contain",
+    "imageAlt": "FPGA 스톱워치 프로젝트",
+    "signal": "100 MHz → Tick → 7-SEG",
+    "summary": "Verilog 기반 분·초 시계와 스톱워치의 카운터·표시 로직을 학습했습니다.",
+    "role": "Verilog RTL · 타이밍 설계",
+    "stack": [
+      "Verilog",
+      "Vivado",
+      "Basys3",
+      "Counter / FSM"
+    ],
+    "overview": "Basys3 FPGA에서 버튼 입력, 모드 제어, 시간 카운터, 7-Segment 표시 구조를 학습한 Verilog 프로젝트입니다. 공개 저장소는 Vivado 프로젝트 파일 중심으로 구성되어 있습니다.",
+    "flow": "100 MHz Clock → Tick Generator → Counter / Mode → FND Controller → 7-Segment",
+    "responsibilities": [
+      "분·초 카운터와 동작 모드 설계 학습",
+      "버튼 입력, 스톱워치 시작·정지·초기화 처리",
+      "7-Segment 출력 제어와 시뮬레이션 검토"
+    ],
+    "implementation": [
+      "클록 분주와 Tick 생성, 디바운싱, 7-Segment 멀티플렉싱 구조를 다뤘습니다.",
+      "학습 저장소에 포함된 RTL을 기준으로 구현 범위를 확인해야 합니다."
+    ],
+    "problem": "시간 카운터와 FSM 상태 갱신 동작에서 타이밍 및 시뮬레이션 문제를 점검하며 수정했습니다.",
+    "video": null
+  },
+  {
+    "id": "rotary-fan",
+    "title": "Rotary Encoder Fan Control",
+    "repo": "leesee1393-ux/Rotary-Encoder-LED-Bar-Fan-Project",
+    "label": "MCU / CONTROL",
+    "type": "REPOSITORY PREPARING",
+    "kind": "standard",
+    "status": "저장소 준비 중",
+    "image": null,
+    "imageFit": "contain",
+    "imageAlt": "로터리 엔코더 팬 제어 준비 중",
+    "signal": "Encoder → LED BAR",
+    "summary": "로터리 엔코더·LED Bar·팬 연동을 주제로 준비 중인 저장소입니다.",
+    "role": "공개 코드 미등록",
+    "stack": [
+      "Rotary Encoder",
+      "LED Bar",
+      "Motor"
+    ],
+    "overview": "로터리 엔코더와 LED Bar, 팬 모터를 연결하는 학습 주제입니다. 현재 GitHub 저장소가 비어 있어 구현이 완료되었다고 표시하지 않습니다.",
+    "flow": "Rotary Encoder → Input Handling → LED Bar / Fan (planned)",
+    "responsibilities": [
+      "회전 방향·버튼 입력 처리 구조 기획",
+      "LED Bar 및 팬 모터 표시·제어 인터페이스 구상"
+    ],
+    "implementation": [
+      "코드와 README가 공개되면 실제 구현 내용을 추가할 예정입니다."
+    ],
+    "problem": "현재 공개된 구현 자료가 없어 구체적 성과를 주장할 수 없습니다.",
+    "video": null
+  },
+  {
+    "id": "led-mealy",
+    "title": "FPGA Button & LED",
+    "repo": "leesee1393-ux/LED_btn_melay",
+    "label": "VERILOG / FPGA",
+    "type": "RTL LEARNING",
+    "kind": "archive",
+    "status": "학습 기록",
+    "image": "https://raw.githubusercontent.com/leesee1393-ux/LED_btn_melay/main/docs/fsm_state_diagrams.svg",
+    "imageFit": "contain",
+    "imageAlt": "Moore/Mealy FSM 설계 학습 다이어그램",
+    "signal": "Debounce → LED Toggle",
+    "summary": "버튼 디바운싱과 LED 토글 RTL, Moore/Mealy FSM 설계 학습.",
+    "role": "버튼·LED RTL 구현",
+    "stack": [
+      "Verilog",
+      "Basys3",
+      "Debounce"
+    ],
+    "overview": "Verilog HDL로 버튼의 디바운싱과 LED 토글을 구현하고 Moore/Mealy FSM 개념을 별도로 공부한 실습입니다.",
+    "flow": "Button → Debounce → Clean Signal → LED Toggle",
+    "responsibilities": [
+      "버튼 입력과 디바운싱 회로 구성",
+      "LED 토글 실습 및 FSM 전이도 작성"
+    ],
+    "implementation": [
+      "README에서 구현된 LED 토글 RTL과 FSM 개념 설계를 명확히 구분합니다."
+    ],
+    "problem": "다중 상태 LED 왕복 패턴은 실제 구현한 RTL이 아닌 설계 학습 자료입니다.",
+    "video": null
+  },
+  {
+    "id": "qt-calc",
+    "title": "Qt Calculator",
+    "repo": "leesee1393-ux/Qt-Calculator",
+    "label": "C++ / QT",
+    "type": "LEARNING",
+    "kind": "archive",
+    "status": "학습 기록",
+    "image": "https://github.com/user-attachments/assets/2534517b-d531-4c4e-8453-9931bc52fa7e",
+    "imageFit": "contain",
+    "imageAlt": "Qt Calculator 스크린샷",
+    "signal": "C++ / Qt Widgets",
+    "summary": "Qt 6와 C++로 구현한 사칙연산·괄호 계산기.",
+    "role": "GUI · 수식 평가",
+    "stack": [
+      "Qt 6",
+      "C++",
+      "Qt Creator"
+    ],
+    "overview": "Qt Widgets를 이용한 계산기 앱으로 숫자 입력, 소수점, 괄호, 백스페이스, 초기화와 식 평가를 연습했습니다.",
+    "flow": "Qt Button → Expression → Evaluation → Display",
+    "responsibilities": [
+      "MainWindow UI와 버튼 입력 처리",
+      "수식 평가 로직 연동"
+    ],
+    "implementation": [
+      "숫자 및 연산자, 소수점과 괄호를 포함한 수식을 계산할 수 있도록 구현했습니다."
+    ],
+    "problem": "화면 입력 처리와 계산 로직을 구분해 구성했습니다.",
+    "video": null
+  },
+  {
+    "id": "stm32-led",
+    "title": "STM32 Register-Level LED",
+    "repo": "leesee1393-ux/How-to-connect-an-external-LED-and-control-its-on-off-state",
+    "label": "STM32 / REGISTER",
+    "type": "LEARNING",
+    "kind": "archive",
+    "status": "학습 기록",
+    "image": "https://github.com/user-attachments/assets/e8031d75-816e-4086-b073-6b0d6d99b22f",
+    "imageFit": "contain",
+    "imageAlt": "STM32 외부 LED 구동 실물 사진",
+    "signal": "GPIO Register → LED",
+    "summary": "STM32F411 GPIO 레지스터 직접 접근으로 외부 LED 제어.",
+    "role": "GPIO Register 실습",
+    "stack": [
+      "STM32F411",
+      "C",
+      "GPIO"
+    ],
+    "overview": "STM32F411에서 HAL을 사용하지 않고 메모리 맵 GPIO 레지스터를 직접 설정한 외부 LED 제어 실습입니다.",
+    "flow": "C → MODER / OTYPER / ODR → LED",
+    "responsibilities": [
+      "GPIO 관련 레지스터 주소 확인",
+      "출력 모드와 LED ON/OFF 구현"
+    ],
+    "implementation": [
+      "회로도와 레지스터 맵, 구현 사진을 README에 정리했습니다."
+    ],
+    "problem": "데이터시트를 읽고 레지스터를 설정하는 과정을 학습했습니다.",
+    "video": null
+  },
+  {
+    "id": "portfolio-site",
+    "title": "Portfolio Website",
+    "repo": "leesee1393-ux/leesee1393-ux.github.io",
+    "label": "WEB / ARCHIVE",
+    "type": "PORTFOLIO",
+    "kind": "archive",
+    "status": "운영 중",
+    "image": null,
+    "imageFit": "contain",
+    "imageAlt": "포트폴리오 웹사이트",
+    "signal": "CODE → DOCUMENT",
+    "summary": "프로젝트와 기술 기록을 정리하는 GitHub Pages 사이트.",
+    "role": "개인 기술 포트폴리오",
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
+    "overview": "임베디드 프로젝트의 기능, 역할과 GitHub 저장소를 정리하는 개인 GitHub Pages 웹사이트입니다.",
+    "flow": "Project → Engineering Note → GitHub Pages",
+    "responsibilities": [
+      "프로젝트별 구현 범위와 원본 링크 정리",
+      "간결한 메인 화면과 프로젝트 상세 페이지 구성"
+    ],
+    "implementation": [
+      "각 프로젝트의 개요, 기여, 기술 스택, 주요 구현 내용을 보여줍니다."
+    ],
+    "problem": "복잡한 디자인보다 빠르게 탐색할 수 있는 정보 구조로 개선했습니다.",
+    "video": null
+  }
+];
+
+</script><script>
+(() => {
+  'use strict';
+  const projects = window.PORTFOLIO_PROJECTS || [];
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const url = p => `project.html?id=${encodeURIComponent(p.id)}`;
+  const github = p => `https://github.com/${p.repo}`;
+  const tags = p => `<div class="stack">${p.stack.map(s=>`<span>${escape(s)}</span>`).join('')}</div>`;
+  const media = (p, n, cls='') => `<figure class="media ${p.image ? 'has-photo' : ''} ${p.imageFit === 'contain' ? 'fit-contain' : ''} ${cls}">
+    <span class="media-number">${String(n).padStart(2,'0')} / PROJECT</span>
+    ${p.image ? `<img src="${escape(p.image)}" alt="${escape(p.imageAlt)}" loading="lazy" onload="this.parentElement.classList.add('image-loaded')" onerror="this.parentElement.classList.add('image-missing')">` : ''}
+    <div class="photo-fallback" aria-hidden="true"><span class="fallback-icon">${escape(p.id === 'linux-fan' ? 'FAN' : p.id === 'vision-tracker' ? 'RC' : p.id === 'fpga-stopwatch' ? 'FPGA' : p.id === 'rotary-fan' ? 'MCU' : p.id === 'stm32-motor' ? 'UART' : p.id === 'avr-rtc' ? 'LCD' : 'DEV')}</span><span>${escape(p.signal)}</span></div>
+  </figure>`;
+  const actions = p => `<div class="card-actions"><a class="detail-link" href="${url(p)}">프로젝트 자세히 보기 ↗</a><a class="github-link" href="${github(p)}" target="_blank" rel="noopener noreferrer">GitHub 코드 ↗</a></div>`;
+  function renderHome(){
+    const featured = document.getElementById('featured-projects');
+    if(!featured) return;
+    const big = projects.filter(p=>p.kind==='featured');
+    const small = projects.filter(p=>p.kind==='standard');
+    const archive = projects.filter(p=>p.kind==='archive');
+    featured.innerHTML = big.map((p,i)=>`<article class="feature-card">${media(p,i+1)}<div class="feature-card-content"><div class="card-eyebrow"><span>${escape(p.label)}</span><span>${escape(p.type)}</span></div><h3>${escape(p.title)}</h3><p class="card-summary">${escape(p.summary)}</p><p class="role-line">${escape(p.role)}</p>${tags(p)}${actions(p)}</div></article>`).join('');
+    document.getElementById('other-projects').innerHTML=small.map((p,i)=>`<article class="small-card">${media(p,i+3)}<div class="small-card-content"><div class="card-eyebrow"><span>${escape(p.label)}</span></div><h3>${escape(p.title)}</h3><p class="card-summary">${escape(p.summary)}</p><p class="role-line">${escape(p.role)}</p>${tags(p)}${actions(p)}</div></article>`).join('');
+    document.getElementById('archive-list').innerHTML=archive.map((p,i)=>`<article class="archive-item"><span class="archive-no">${String(i+7).padStart(2,'0')}</span><div><h3><a href="${url(p)}">${escape(p.title)}</a></h3><p>${escape(p.summary)}</p></div><a class="archive-open" href="${url(p)}" aria-label="${escape(p.title)} 상세 보기">↗</a></article>`).join('');
+    const toggle=document.querySelector('.nav-toggle');
+    const nav=document.getElementById('site-nav');
+    if(toggle && nav){toggle.addEventListener('click',()=>{const open=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!open));nav.classList.toggle('open',!open)});nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');toggle.setAttribute('aria-expanded','false')}));}
+  }
+  function renderDetail(){
+    const root = document.getElementById('project-detail');
+    if(!root) return;
+    const id = new URLSearchParams(window.location.search).get('id');
+    const p = projects.find(p=>p.id===id);
+    if(!p){document.title='프로젝트를 찾을 수 없습니다 | 이세형';root.innerHTML='<section class="error-state"><p class="eyebrow">404 / NOT FOUND</p><h1>프로젝트를 찾을 수 없습니다.</h1><p>프로젝트 목록에서 다시 선택해 주세요.</p><a class="btn btn-primary" href="index.html#projects">프로젝트 목록 보기 ↗</a></section>';return;}
+    const next=projects[(projects.indexOf(p)+1)%projects.length];
+    document.title = `${p.title} | SEHYUNG LEE`;
+    document.querySelector('meta[name="description"]').setAttribute('content',p.summary);
+    root.innerHTML=`<div class="breadcrumbs"><a href="index.html">Home</a><span>/</span><a href="index.html#projects">Projects</a><span>/</span><span>${escape(p.title)}</span></div>
+    <article><header class="project-hero"><p class="eyebrow">PROJECT NOTE / ${escape(p.label)} · ${escape(p.status)}</p><h1>${escape(p.title)}</h1><p class="repo-path">github.com/${escape(p.repo)}</p><p class="project-intro">${escape(p.summary)}</p>${tags(p)}<div class="card-actions"><a class="btn btn-primary" href="${github(p)}" target="_blank" rel="noopener noreferrer">GitHub 원본 코드 보기 ↗</a>${p.video?`<a class="btn btn-quiet" href="${escape(p.video)}" target="_blank" rel="noopener noreferrer">시연 영상 보기 ↗</a>`:''}<a class="btn btn-quiet" href="index.html#projects">← 목록으로</a></div></header>
+    ${media(p,projects.indexOf(p)+1,'detail-figure')}
+    <div class="detail-cols"><section><p class="eyebrow">01 / OVERVIEW</p><h2>어떤 프로젝트인가요?</h2><p>${escape(p.overview)}</p></section><aside class="role-panel"><h3>내가 담당한 부분</h3><p>${escape(p.role)}</p><div class="role-meta"><span>SOURCE REPOSITORY</span><strong>${escape(p.repo)}</strong></div><div class="role-meta"><span>STATUS</span><strong>${escape(p.status)}</strong></div></aside></div>
+    <section class="detail-sections"><p class="eyebrow">02 / IMPLEMENTATION</p><h2>구현 · 학습 항목</h2><ol class="detail-points">${p.responsibilities.map((s,i)=>`<li><span class="point-no">${String(i+1).padStart(2,'0')}</span><p>${escape(s)}</p></li>`).join('')}</ol></section>
+    <section class="detail-section"><p class="eyebrow">03 / SYSTEM FLOW</p><h2>동작 흐름</h2><div class="flow-text">${escape(p.flow)}</div><p>${p.implementation.map(escape).join(' ')}</p></section>
+    <section class="detail-section"><p class="eyebrow">04 / TROUBLESHOOTING · NOTES</p><h2>문제 해결 및 기록</h2><p>${escape(p.problem)}</p></section>
+    <div class="bottom-cta"><div><p>NEXT PROJECT / FIELD NOTES</p><a class="next-link" href="${url(next)}">${escape(next.title)} ↗</a></div><a class="btn btn-quiet" href="index.html#projects">전체 프로젝트로 돌아가기 ↗</a></div></article>`;
+  }
+  renderHome();
+  renderDetail();
+})();
+
+</script>
+</body>
+</html>
