@@ -3,13 +3,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+
 permissions:
   contents: read
   pages: write
   id-token: write
+
 concurrency:
   group: pages
   cancel-in-progress: true
+
 jobs:
   deploy:
     environment:
@@ -24,9 +27,40 @@ jobs:
           enablement: true
       - name: Prepare public files
         run: |
+          set -euo pipefail
           mkdir -p _site
-          cp index.html _site/index.html
+          # Project detail pages MUST be included, not just index.html.
+          cp index.html project.html _site/
+          # Include optional static assets used by future site updates.
+          for file in style.css projects.js app.js project-detail.js; do
+            if [ -f "$file" ]; then cp "$file" _site/; fi
+          done
+          for dir in assets images; do
+            if [ -d "$dir" ]; then cp -R "$dir" "_site/$dir"; fi
+          done
           touch _site/.nojekyll
+      - name: Validate project routes before deploy
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          from pathlib import Path
+          home = Path("_site/index.html").read_text(encoding="utf-8")
+          detail = Path("_site/project.html").read_text(encoding="utf-8")
+          def read_projects(page):
+              match = re.search(r"window\.PORTFOLIO_PROJECTS\s*=\s*(\[[\s\S]*?\]);", page)
+              if not match:
+                  raise RuntimeError("Missing project data")
+              return json.loads(match.group(1))
+          home_projects = read_projects(home)
+          detail_projects = read_projects(detail)
+          ids = [project["id"] for project in home_projects]
+          assert len(ids) == len(set(ids)) and len(ids) >= 10, "Missing or duplicate project IDs"
+          assert set(ids) == {project["id"] for project in detail_projects}, "Detail page data mismatch"
+          assert "project.html?id=" in home, "Project detail URL generator missing"
+          assert "URLSearchParams" in detail and 'id' in detail, "Project page route parser missing"
+          print(f"Validated published index, detail template and {len(ids)} project routes")
+          PY
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
