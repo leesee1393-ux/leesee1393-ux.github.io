@@ -67,3 +67,22 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Smoke test live project URLs after deployment
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          site="${SITE_URL%/}"
+          if [ -z "$site" ]; then
+            echo "Missing GitHub Pages deployment URL"
+            exit 1
+          fi
+          curl -fsSL --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 "$site/" -o /tmp/portfolio-home.html
+          grep -Fq 'project.html?id=' /tmp/portfolio-home.html
+          for id in linux-fan vision-tracker stm32-motor avr-rtc fpga-stopwatch rotary-fan led-mealy qt-calc stm32-led portfolio-site; do
+            url="$site/project.html?id=$id"
+            curl -fsSL --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 "$url" -o /tmp/portfolio-project.html
+            grep -Fq 'id="project-detail"' /tmp/portfolio-project.html
+            echo "HTTP 200 + detail template verified: $id"
+          done
