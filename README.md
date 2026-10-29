@@ -13,6 +13,6 @@ Settings → Pages → Build and deployment → Source에서 **GitHub Actions**�
 `main`에 변경을 올리면 포함된 워크플로가 배포합니다. Actions 탭에서 수동 실행도 가능합니다.
 
 현재 저장소 이름은 `sehyung.github.io`이고 계정 이름은 `leesee1393-ux`이므로 프로젝트 사이트 주소는 다음과 같습니다.
-https://leesee1393-ux.github.io/sehyung.github.io/
+https://leesee1393-ux.github.io/
 
 계정 루트 주소 `https://leesee1393-ux.github.io/`를 원하면 저장소 이름을 `leesee1393-ux.github.io`로 변경하세요.
