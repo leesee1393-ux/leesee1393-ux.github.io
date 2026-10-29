@@ -216,42 +216,47 @@ window.PORTFOLIO_PROJECTS = [
     "video": null
   },
   {
-    "id": "rotary-fan",
-    "name": "Rotary-Encoder-LED-Bar-Fan-Project",
-    "display": "Rotary Encoder Fan Control",
-    "group": "MCU · Experiment",
-    "kind": "planned",
-    "badge": "IN PREPARATION",
-    "repo": "https://github.com/leesee1393-ux/Rotary-Encoder-LED-Bar-Fan-Project",
-    "cover": null,
-    "illustration": "rotary",
-    "imageAlt": "로터리 엔코더와 LED Bar 팬 제어 스케치",
-    "summary": "로터리 엔코더 입력과 LED Bar, 팬 모터 제어를 연동하는 학습 주제입니다. GitHub 저장소는 현재 비어 있습니다.",
-    "short": "로터리 엔코더 · LED Bar · 팬 제어 연동 학습 주제",
+    "id": "fpga-microwave",
+    "name": "FPGA-Microwave-Oven-Controller",
+    "display": "FPGA Microwave Oven Controller",
+    "group": "FPGA · Digital Control",
+    "kind": "solo",
+    "badge": "FPGA PROJECT",
+    "repo": "https://github.com/leesee1393-ux/FPGA-Microwave-Oven-Controller",
+    "cover": "https://raw.githubusercontent.com/leesee1393-ux/FPGA-Microwave-Oven-Controller/main/docs/images/block_diagram.svg",
+    "illustration": "fpga",
+    "imageAlt": "FPGA 전자레인지 제어 시스템의 실제 블록 다이어그램",
+    "summary": "Basys3와 Verilog로 로터리 시간 설정, FND 카운트다운, 부저 알림 및 서보 도어 제어를 구현했습니다.",
+    "short": "Basys3 · Verilog 기반 로터리/FND 타이머·부저·서보 도어 제어",
     "tags": [
-      "Rotary Encoder",
-      "LED Bar",
-      "Motor"
+      "Verilog HDL",
+      "Basys3",
+      "Vivado",
+      "PWM / FND"
     ],
-    "role": "현재 상태: 저장소 초기 단계",
-    "intro": "로터리 엔코더, LED Bar, 팬 제어 연동을 주제로 한 저장소입니다. 현재 공개 저장소에 코드와 README가 없으므로 구현 완료 프로젝트로 소개하지 않습니다.",
-    "flow": "Rotary Input → Mode / Speed Control → LED Bar + Fan Motor (planned)",
+    "role": "구현: Rotary · Timer/FND · Buzzer · Servo",
+    "intro": "Basys3(Artix-7) FPGA와 Verilog HDL을 이용한 전자레인지 제어 프로젝트입니다. 로터리 엔코더와 KEY로 시간을 설정하고, 0~540초 카운트다운을 4자리 FND에 MM.SS 형식으로 표시합니다. 종료 시 부저가 3회 울리며, 스위치로 SG90 서보 도어를 개폐합니다.",
+    "flow": "Rotary S1/S2 · KEY → Debouncer → Time Setting → 1ms Tick / Countdown → FND · Buzzer; SW → 50Hz Servo PWM",
     "points": [
       [
-        "계획 주제",
-        "회전 입력에 따른 모드 및 출력 변화를 LED Bar와 팬 제어로 표현하는 구성입니다."
+        "입력·시간 설정",
+        "Rotary Encoder CW/CCW와 KEY Toggle을 이용해 0~540초의 타이머 설정을 처리합니다."
       ],
       [
-        "현재 공개 범위",
-        "2026년 10월 기준, 원본 GitHub 저장소가 비어 있어 실제 구현을 검증할 수 없습니다."
+        "타이머·FND",
+        "100MHz 클록에서 1ms Tick을 생성하고 카운트다운을 4자리 FND의 MM.SS 형식으로 표시합니다."
       ],
       [
-        "향후 기록",
-        "회로도, MCU 코드, 실물 동작 영상 및 트러블슈팅을 확보한 이후 상세 구현 내용을 채울 예정입니다."
+        "부저·도어",
+        "타이머 종료 시 부저 3회 알림, SW 입력에 따라 SG90 도어 서보를 50Hz PWM으로 제어합니다."
+      ],
+      [
+        "타이밍 최적화",
+        "분·초 변환의 긴 연산 경로에서 발생한 Setup Timing 위반을 set_time 총 초 입력으로 개선했습니다. FSM 그림은 개념도입니다."
       ]
     ],
-    "status": "저장소 준비 중",
-    "video": null
+    "status": "구현 기록",
+    "video": "https://youtu.be/Dh0c_G7ZhPM"
   },
   {
     "id": "led-mealy",
