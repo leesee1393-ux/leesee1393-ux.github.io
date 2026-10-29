@@ -346,35 +346,38 @@ window.PORTFOLIO_PROJECTS = [
     "video": null
   },
   {
-    "id": "rotary-fan",
-    "title": "Rotary Encoder Fan Control",
-    "repo": "leesee1393-ux/Rotary-Encoder-LED-Bar-Fan-Project",
-    "label": "MCU / CONTROL",
-    "type": "REPOSITORY PREPARING",
+    "id": "fpga-microwave",
+    "title": "FPGA Microwave Oven Controller",
+    "repo": "leesee1393-ux/FPGA-Microwave-Oven-Controller",
+    "label": "VERILOG / BASYS3",
+    "type": "FPGA PROJECT",
     "kind": "standard",
-    "status": "저장소 준비 중",
-    "image": null,
+    "status": "구현 기록",
+    "image": "https://raw.githubusercontent.com/leesee1393-ux/FPGA-Microwave-Oven-Controller/main/docs/images/block_diagram.svg",
     "imageFit": "contain",
-    "imageAlt": "로터리 엔코더 팬 제어 준비 중",
-    "signal": "Encoder → LED BAR",
-    "summary": "로터리 엔코더·LED Bar·팬 연동을 주제로 준비 중인 저장소입니다.",
-    "role": "공개 코드 미등록",
+    "imageAlt": "FPGA 전자레인지 제어 시스템의 실제 블록 다이어그램",
+    "signal": "Rotary → Timer → FND",
+    "summary": "Basys3와 Verilog로 로터리 시간 설정, FND 카운트다운, 부저 알림 및 서보 도어 제어를 구현했습니다.",
+    "role": "구현: Rotary · Timer/FND · Buzzer · Servo",
     "stack": [
-      "Rotary Encoder",
-      "LED Bar",
-      "Motor"
+      "Verilog HDL",
+      "Basys3",
+      "Vivado",
+      "PWM / FND"
     ],
-    "overview": "로터리 엔코더와 LED Bar, 팬 모터를 연결하는 학습 주제입니다. 현재 GitHub 저장소가 비어 있어 구현이 완료되었다고 표시하지 않습니다.",
-    "flow": "Rotary Encoder → Input Handling → LED Bar / Fan (planned)",
+    "overview": "Basys3(Artix-7) FPGA와 Verilog HDL을 이용한 전자레인지 제어 프로젝트입니다. 로터리 엔코더와 KEY로 시간을 설정하고, 0~540초 카운트다운을 4자리 FND에 MM.SS 형식으로 표시합니다. 종료 시 부저가 3회 울리며, 스위치로 SG90 서보 도어를 개폐합니다.",
+    "flow": "Rotary S1/S2 · KEY → Debouncer → Time Setting → 1ms Tick / Countdown → FND · Buzzer; SW → 50Hz Servo PWM",
     "responsibilities": [
-      "회전 방향·버튼 입력 처리 구조 기획",
-      "LED Bar 및 팬 모터 표시·제어 인터페이스 구상"
+      "Rotary Encoder CW/CCW·KEY Toggle 입력과 시간 설정 로직 구성",
+      "0~540초 카운트다운 및 4자리 FND MM.SS 표시 연동",
+      "타이머 종료 부저 3회 알림과 SW 기반 SG90 서보 50Hz PWM 도어 제어"
     ],
     "implementation": [
-      "코드와 README가 공개되면 실제 구현 내용을 추가할 예정입니다."
+      "100MHz 시스템 클록에서 생성한 1ms Tick을 타이머·부저 동작에 재사용하고, 서보 제어는 별도 PWM 로직으로 구성했습니다.",
+      "시스템 블록 다이어그램과 동작 흐름도를 SVG로 문서화했습니다. 흐름도는 실제 동작 설명용 개념도이며 별도의 통합 FSM 상태 레지스터를 의미하지 않습니다."
     ],
-    "problem": "현재 공개된 구현 자료가 없어 구체적 성과를 주장할 수 없습니다.",
-    "video": null
+    "problem": "분·초 변환 연산 경로가 길어 발생한 Setup Timing 위반을 총 초 값(set_time) 직접 전달로 최적화했습니다. Rotary 시간 설정의 비트 폭과 FND 입력 연결 문제도 점검했습니다.",
+    "video": "https://youtu.be/Dh0c_G7ZhPM"
   },
   {
     "id": "led-mealy",
@@ -514,7 +517,7 @@ window.PORTFOLIO_PROJECTS = [
   const media = (p, n, cls='') => `<figure class="media ${p.image ? 'has-photo' : ''} ${p.imageFit === 'contain' ? 'fit-contain' : ''} ${cls}">
     <span class="media-number">${String(n).padStart(2,'0')} / PROJECT</span>
     ${p.image ? `<img src="${escape(p.image)}" alt="${escape(p.imageAlt)}" loading="lazy" onload="this.parentElement.classList.add('image-loaded')" onerror="this.parentElement.classList.add('image-missing')">` : ''}
-    <div class="photo-fallback" aria-hidden="true"><span class="fallback-icon">${escape(p.id === 'linux-fan' ? 'FAN' : p.id === 'vision-tracker' ? 'RC' : p.id === 'fpga-stopwatch' ? 'FPGA' : p.id === 'rotary-fan' ? 'MCU' : p.id === 'stm32-motor' ? 'UART' : p.id === 'avr-rtc' ? 'LCD' : 'DEV')}</span><span>${escape(p.signal)}</span></div>
+    <div class="photo-fallback" aria-hidden="true"><span class="fallback-icon">${escape(p.id === 'linux-fan' ? 'FAN' : p.id === 'vision-tracker' ? 'RC' : p.id === 'fpga-stopwatch' ? 'FPGA' : p.id === 'fpga-microwave' ? 'FPGA' : p.id === 'stm32-motor' ? 'UART' : p.id === 'avr-rtc' ? 'LCD' : 'DEV')}</span><span>${escape(p.signal)}</span></div>
   </figure>`;
   const actions = p => `<div class="card-actions"><a class="detail-link" href="${url(p)}">프로젝트 자세히 보기 ↗</a><a class="github-link" href="${github(p)}" target="_blank" rel="noopener noreferrer">GitHub 코드 ↗</a></div>`;
   function renderHome(){
