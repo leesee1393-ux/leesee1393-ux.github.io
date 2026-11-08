@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 580" role="img" aria-labelledby="title desc">
+<title id="title">FPGA SPI Master Slave Sensor System Block Diagram</title>
+<desc id="desc">DHT11 and HC-SR04 feed Slave Sensor FSM, then SPI Slave transfers data on MISO to SPI Master, followed by Sample Commit and FND, OLED I2C and UART outputs. Master drives SCK MOSI and CS_n back to Slave.</desc>
+<defs>
+ <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#8b5544"/></marker>
+ <marker id="blue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#3d647d"/></marker>
+ <style>text{font-family:Arial,'Noto Sans KR',sans-serif;fill:#2e2a27}.head{font-size:29px;font-weight:700}.sub{font-size:16px;fill:#72695f}.board{font-size:18px;font-weight:700;letter-spacing:1px}.node{font-size:18px;font-weight:700}.minor{font-size:14px;fill:#61594f}.line{stroke:#8b5544;stroke-width:3;fill:none;marker-end:url(#arr)}.ctrl{stroke:#3d647d;stroke-width:3;fill:none;marker-end:url(#blue)}</style>
+</defs>
+<rect width="1280" height="580" rx="16" fill="#f8f4ed"/>
+<text x="42" y="54" class="head">FPGA SPI Master–Slave Sensor System</text>
+<text x="42" y="83" class="sub">Two Basys3 boards · SPI Mode 0 · Address 8-bit + Response 8-bit</text>
+<rect x="33" y="116" width="535" height="335" rx="16" fill="#edf6f1" stroke="#78a08e" stroke-width="2"/>
+<rect x="590" y="116" width="655" height="335" rx="16" fill="#eef2f9" stroke="#8398b5" stroke-width="2"/>
+<text x="56" y="149" class="board" fill="#236851">SLAVE BASYS3</text><text x="615" y="149" class="board" fill="#335e80">MASTER BASYS3</text>
+<rect x="58" y="187" width="140" height="57" rx="9" fill="#fff" stroke="#96b6a5" stroke-width="2"/>
+<text x="128" y="222" class="node" text-anchor="middle">DHT11</text>
+<rect x="58" y="285" width="140" height="57" rx="9" fill="#fff" stroke="#96b6a5" stroke-width="2"/>
+<text x="128" y="320" class="node" text-anchor="middle">HC-SR04</text>
+<rect x="244" y="215" width="151" height="98" rx="10" fill="#deece4" stroke="#61967d" stroke-width="2"/>
+<text x="319" y="254" class="node" text-anchor="middle">Slave Sensor</text><text x="319" y="279" class="node" text-anchor="middle">FSM</text>
+<rect x="439" y="223" width="108" height="80" rx="9" fill="#d1e5dd" stroke="#61967d" stroke-width="2"/>
+<text x="493" y="256" class="node" text-anchor="middle">SPI</text><text x="493" y="280" class="node" text-anchor="middle">Slave</text>
+<path class="line" d="M198 215H218V245H244"/><path class="line" d="M198 315H218V283H244"/><path class="line" d="M395 264H439"/>
+<rect x="612" y="223" width="116" height="80" rx="9" fill="#dce6f4" stroke="#7391ba" stroke-width="2"/>
+<text x="670" y="255" class="node" text-anchor="middle">SPI</text><text x="670" y="280" class="node" text-anchor="middle">Master</text>
+<rect x="769" y="223" width="154" height="80" rx="9" fill="#dce6f4" stroke="#7391ba" stroke-width="2"/>
+<text x="846" y="254" class="node" text-anchor="middle">Sample</text><text x="846" y="279" class="node" text-anchor="middle">Commit</text>
+<rect x="971" y="175" width="212" height="49" rx="8" fill="#fff" stroke="#aeb9c9"/><text x="1077" y="205" class="node" text-anchor="middle">FND</text>
+<rect x="971" y="244" width="212" height="49" rx="8" fill="#fff" stroke="#aeb9c9"/><text x="1077" y="275" class="node" text-anchor="middle">OLED (I²C)</text>
+<rect x="971" y="313" width="212" height="49" rx="8" fill="#fff" stroke="#aeb9c9"/><text x="1077" y="343" class="node" text-anchor="middle">UART</text>
+<path class="line" d="M547 239H612"/><text x="580" y="228" class="minor" text-anchor="middle">MISO</text>
+<path class="ctrl" d="M612 286H590V365H569V365H493V303"/><text x="580" y="396" class="minor" text-anchor="middle">SCK · MOSI · CS_n</text>
+<path class="line" d="M728 264H769"/><path class="line" d="M923 264H947V199H971"/><path class="line" d="M947 264H971"/><path class="line" d="M947 264V337H971"/>
+<text x="42" y="491" class="sub">DATA: Sensor acquisition → Addressed SPI response → Valid sample commit → Display / serial output</text>
+<text x="42" y="522" class="sub">CONTROL: SPI Master generates SCK, MOSI and CS_n; Slave returns sensor response through MISO</text>
+</svg>
